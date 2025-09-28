@@ -87,7 +87,7 @@ if __name__ == "__main__":
 	if not config_path.is_file() or config_path.suffix != ".json":
 		raise ValueError(f"Invalid configuration file: {path}")
 
-	CONFIG = json.load(open(config_path))
+	CONFIG : dict = json.load(open(config_path))
 
 	root_path = CONFIG.get("root_path", None)
 	if not root_path:
