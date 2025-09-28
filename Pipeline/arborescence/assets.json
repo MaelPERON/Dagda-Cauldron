@@ -1,0 +1,35 @@
+{
+    "%asset_id%": {
+        "modeling": {
+            "work": {},
+            "exports": {}
+        },
+        "unwrapping": {
+            "work": {},
+            "exports": {}
+        },
+        "texturing": {
+            "work": {},
+            "exports": {}
+        },
+        "shading": {
+            "exports": {},
+            "renders": {},
+            "work": {}
+        },
+        "compositing": {
+            "work": {},
+            "exports": {},
+            "renders": {}
+        },
+        "rigging": {
+            "work": {},
+            "exports": {}
+        },
+        "setup": {
+            "work": {},
+            "exports": {}
+        }
+    },
+    "description.txt": "A regular %ASSET_TYPE% asset. Created at %CREATION_TIME%."
+}
