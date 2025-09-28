@@ -121,20 +121,3 @@ class TreeGenerator:
 if __name__ == "__main__":
 	path = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\configs.json"
 	generator = TreeGenerator(path)
-
-	CONFIG : dict = json.load(open(config_path))
-
-	root_path = CONFIG.get("root_path", None)
-	if not root_path:
-		raise ValueError(f"'root_path' not defined in configuration file: {path}")
-	ROOT_PATH = fetch_resource_path(root_path)
-
-	TREE = CONFIG.get("tree", None)
-	if not TREE:
-		raise ValueError(f"'tree' not defined in configuration file: {path}")
-	
-	TYPE_ALIASES = CONFIG.get("type_aliases", None)
-	if not TYPE_ALIASES:
-		raise ValueError(f"'type_aliases' not defined in configuration file: {path}")
-
-	generate_asset_tree(asset_name, TREE, TYPE_ALIASES)
