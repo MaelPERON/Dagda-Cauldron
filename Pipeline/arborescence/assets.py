@@ -79,6 +79,7 @@ def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
 if __name__ == "__main__":
 	root = r"G:\Mon Drive\ENSI\01_E4\Exos\taste_of_guerilla" # first argument
 	config = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\assets.json" # second argument
+	asset_name = "char_hero" # third argument
 	ROOT_PATH = fetch_resource_path("%projet%/assets/")
 	CONFIG_PATH = fetch_resource_path("./assets.json")
 
@@ -90,4 +91,4 @@ if __name__ == "__main__":
 
 	aborescence = json.load(open(CONFIG_PATH))
 
-	generate_asset_tree("char_hero_v1", aborescence)
+	generate_asset_tree(asset_name, aborescence)
