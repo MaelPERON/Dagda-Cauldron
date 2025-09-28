@@ -15,6 +15,14 @@ ASSET_TYPES = {
 CONFIG_PATH = None
 ROOT_PATH = None
 
+def fetch_resource_path(resource: str | Path) -> Path:
+	path = Path(resource)
+
+	if not path.is_absolute():
+		path = SCRIPT_FOLDER / path
+
+	return path
+
 if __name__ == "__main__":
 	root = r"G:\Mon Drive\ENSI\01_E4\Exos\taste_of_guerilla" # first argument
 	config = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\assets.json" # second argument
