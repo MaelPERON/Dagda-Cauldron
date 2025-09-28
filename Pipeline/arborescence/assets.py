@@ -35,57 +35,74 @@ def create_tree_from_dict(base_path: Path, tree: dict|str):
 		# Here "tree" is the content of the file to create at base_path
 		create_tree_file(base_path, tree)
 
-def generate_asset_tree(asset_name: str, tree: dict[dict|str], aliases_list: dict[str, list[str]]) -> Path:
-	parts = asset_name.split("_")
-	length = len(parts)
-	if length < 2:
-		raise ValueError(f"Asset name must be in the format <type>_<id>[_<variant>], got: {asset_name}")
-	elif length == 2:
-		asset_type = parts[0]
-		asset_id = parts[1]
-		asset_variant = "base"
-	else:
-		asset_type = parts[0]
-		asset_variant = parts[-1]
-		asset_id = "_".join(parts[1:-1])
+class TreeGenerator:
+	def __init__(self, config_path: str | Path):
+		path = fetch_resource_path(config_path)
+		if not path.exists():
+			raise FileNotFoundError(f"Configuration file not found: {config_path}")
 
-	# Verify asset_type is a valid alias in aliases_list
-	for key, aliases in aliases_list.items():
-		if asset_type.lower() in aliases:
-			asset_type = key
-			break
-	else:
-		raise ValueError(f"Invalid asset type alias: {asset_type}\nValid types are: {aliases_list}")
+		if not path.is_file() or path.suffix != ".json":
+			raise ValueError(f"Invalid configuration file: {config_path}")
 
-	asset_prefix = aliases_list[asset_type][0]
+		self.config : dict = json.load(open(path))
+		self.root_path = self.config.get("root_path", None)
+		self.tree = self.config.get("tree", None)
+		self.settings = self.config.get("settings", {
+			"entry_type_aliases": None,
+			"has_variants": True
+		})
+		# self.env
 
-	base_folder = ROOT_PATH / asset_prefix
-	base_folder.mkdir(parents=True, exist_ok=True)
+	def add_entry(self, entry_name: str):
+		parts = entry_name.split("_")
+		length = len(parts)
+		if length < 2:
+			raise ValueError(f"Entry name must be in the format <type>_<id>[_<variant>], got: {entry_name}")
+		elif length == 2:
+			entry_type = parts[0]
+			entry_id = parts[1]
+			entry_variant = "base"
+		else:
+			entry_type = parts[0]
+			entry_variant = parts[-1]
+			entry_id = "_".join(parts[1:-1])
 
-	env = {
-		"ASSET_TYPE": asset_type,
-		"ASSET_ID": asset_id,
-		"ASSET_NAME": asset_name,
-		"ASSET_VARIANT": asset_variant,
-		"ASSET_PREFIX": asset_prefix,
-		"CREATION_TIME": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-	}
+		aliases_list = self.settings.get("entry_type_aliases", None)
+		if not aliases_list:
+			raise ValueError(f"'entry_type_aliases' not defined in configuration file: {self.config}")
+		
+		# Verify entry_type is a valid alias in aliases_list
+		for key, aliases in aliases_list.items():
+			if entry_type.lower() in aliases:
+				entry_type = key
+				break
+		else:
+			raise ValueError(f"Invalid entry type alias: {entry_type}\nValid types are: {aliases_list}")
+		
+		entry_prefix = aliases_list[entry_type][0]
+		root_path = fetch_resource_path(self.root_path)
+		if not root_path.exists():
+			raise FileNotFoundError(f"Root path not found: {self.root_path}")
+		base_folder = root_path / entry_prefix
+		base_folder.mkdir(parents=True, exist_ok=True)
 
-	for key, value in env.items():
-		os.environ[key] = value
+		env = {
+			"ENTRY_TYPE": entry_type,
+			"ENTRY_ID": entry_id,
+			"ENTRY_NAME": entry_name,
+			"ENTRY_VARIANT": entry_variant,
+			"ENTRY_PREFIX": entry_prefix,
+			"CREATION_TIME": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+		}
 
-	create_tree_from_dict(base_folder, tree)
+		for key, value in env.items():
+			os.environ[key] = value
+
+		create_tree_from_dict(base_folder, self.tree)
 
 if __name__ == "__main__":
 	path = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\configs.json"
-	config_path = fetch_resource_path(path)
-	asset_name = "char_hero_hurt"
-
-	if not config_path.exists():
-		raise FileNotFoundError(f"Configuration file not found: {path}")
-
-	if not config_path.is_file() or config_path.suffix != ".json":
-		raise ValueError(f"Invalid configuration file: {path}")
+	generator = TreeGenerator(path)
 
 	CONFIG : dict = json.load(open(config_path))
 
