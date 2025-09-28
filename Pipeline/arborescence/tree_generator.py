@@ -2,7 +2,6 @@ from pathlib import Path
 import os
 import json
 import datetime
-import re
 import argparse
 
 SCRIPT_FOLDER = Path(__file__).parent
