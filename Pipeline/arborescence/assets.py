@@ -85,9 +85,7 @@ class TreeGenerator:
 	def parse_entry(self, entry_name: str) -> Path:
 		entry_type, entry_id, entry_variant = self.split_entry(entry_name)
 
-		aliases_list = self.settings.get("entry_type_aliases", None)
-		entry_type = self.fetch_alias(entry_type)
-		entry_prefix = aliases_list[entry_type][0] # Use the first alias as the prefix
+		entry_prefix = self.fetch_alias(entry_type)
 
 		if not self.root_path.exists():
 			raise FileNotFoundError(f"Root path not found: {self.root_path}")
