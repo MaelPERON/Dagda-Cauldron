@@ -1,0 +1,49 @@
+{
+    "settings": {
+        "entry_type_aliases": {
+            "characters": ["characters","character","chars","char"],
+            "props": ["props","prop"],
+            "sets": ["sets", "set"],
+            "parts": ["parts","part"],
+            "vehicles": ["vehicles","veh"],
+            "foliages": ["plants","plant","foliages","foliage"]
+        },
+        "has_variants": true
+    },
+    "root_path": "%projet%/assets",
+    "tree": {
+        "%entry_id%_%entry_variant%": {
+            "modeling": {
+                "work": {},
+                "exports": {}
+            },
+            "unwrapping": {
+                "work": {},
+                "exports": {}
+            },
+            "texturing": {
+                "work": {},
+                "exports": {}
+            },
+            "shading": {
+                "exports": {},
+                "renders": {},
+                "work": {}
+            },
+            "compositing": {
+                "work": {},
+                "exports": {},
+                "renders": {}
+            },
+            "rigging": {
+                "work": {},
+                "exports": {}
+            },
+            "setup": {
+                "work": {},
+                "exports": {}
+            },
+            "description.txt": "A regular %ENTRY_TYPE% asset. Created at %CREATION_TIME%."
+        }
+    }
+}
