@@ -10,7 +10,7 @@
     },
     "root_path": "%projet%/assets",
     "tree": {
-        "%asset_id%_%asset_variant%": {
+        "%entry_id%_%entry_variant%": {
             "modeling": {
                 "work": {},
                 "exports": {}
@@ -41,7 +41,7 @@
                 "work": {},
                 "exports": {}
             },
-            "description.txt": "A regular %ASSET_TYPE% asset. Created at %CREATION_TIME%."
+            "description.txt": "A regular %ENTRY_TYPE% asset. Created at %CREATION_TIME%."
         }
     }
 }
