@@ -34,19 +34,23 @@ def create_tree_file(path: Path, content: str = ""):
 	logging.info(f"Created file: {path}")
 
 def create_tree_from_dict(base_path: Path, tree: dict|str):
+	created_items = []
 	if isinstance(tree, dict):
 		for key, value in tree.items():
 			key_expanded = os.path.expandvars(key)
 			item_path = base_path / key_expanded
+			created_items.append(item_path)
 			if isinstance(value, dict):
 				item_path.mkdir(exist_ok=True, parents=True)
 				logging.info(f"Created directory: {item_path}")
-				create_tree_from_dict(item_path, value)
+				created_items.extend(create_tree_from_dict(item_path, value))
 			else:
 				create_tree_file(item_path, value)
 	else:
 		# Here "tree" is the content of the file to create at base_path
 		create_tree_file(base_path, tree)
+		created_items.append(base_path)
+	return created_items
 
 class TreeGenerator:
 	def __init__(self, config_path: str | Path):
@@ -140,10 +144,10 @@ class TreeGenerator:
 		}
 		self.update_env(extra_env)
 
-		create_tree_from_dict(base_folder, self.tree)
+		files = create_tree_from_dict(base_folder, self.tree)
 		logging.info(f"Entry '{entry_name}' added successfully.")
 
-		return base_folder
+		return ([f for f in files if not f.is_file()] or [None])[0] or base_folder
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Generate tree structure from config and entry name.")
