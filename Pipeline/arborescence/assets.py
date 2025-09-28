@@ -57,7 +57,7 @@ def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
 	else:
 		raise ValueError(f"Invalid asset type alias: {asset_type}\nValid types are: {ASSET_TYPES}")
 
-	asset_prefix = ASSET_TYPES[asset_type][0]
+	asset_prefix = ASSET_TYPES[asset_type][0][1]
 
 	base_folder = ROOT_PATH / asset_type
 	base_folder.mkdir(parents=True, exist_ok=True)
