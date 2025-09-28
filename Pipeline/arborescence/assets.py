@@ -70,9 +70,7 @@ class TreeGenerator:
 
 		return [entry_type, entry_id, entry_variant]
 
-	def parse_entry(self, entry_name: str) -> Path:
-		entry_type, entry_id, entry_variant = self.split_entry(entry_name)
-
+	def fetch_alias(self, entry_type: str) -> str:
 		aliases_list = self.settings.get("entry_type_aliases", None)
 		if not aliases_list:
 			raise ValueError(f"'entry_type_aliases' not defined in configuration file: {self.config}")
@@ -80,12 +78,17 @@ class TreeGenerator:
 		# Verify entry_type is a valid alias in aliases_list
 		for key, aliases in aliases_list.items():
 			if entry_type.lower() in aliases:
-				entry_type = key
-				break
-		else:
-			raise ValueError(f"Invalid entry type alias: {entry_type}\nValid types are: {aliases_list}")
+				return key
 		
-		entry_prefix = aliases_list[entry_type][0]
+		raise ValueError(f"Invalid entry type alias: {entry_type}\nValid types are: {aliases_list}")
+	
+	def parse_entry(self, entry_name: str) -> Path:
+		entry_type, entry_id, entry_variant = self.split_entry(entry_name)
+
+		aliases_list = self.settings.get("entry_type_aliases", None)
+		entry_type = self.fetch_alias(entry_type)
+		entry_prefix = aliases_list[entry_type][0] # Use the first alias as the prefix
+
 		if not self.root_path.exists():
 			raise FileNotFoundError(f"Root path not found: {self.root_path}")
 		base_folder = self.root_path / entry_prefix
