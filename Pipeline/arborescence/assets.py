@@ -53,7 +53,7 @@ class TreeGenerator:
 		})
 		# self.env
 
-	def add_entry(self, entry_name: str):
+	def parse_entry(self, entry_name: str) -> Path:
 		parts = entry_name.split("_")
 		length = len(parts)
 		if length < 2:
@@ -97,6 +97,11 @@ class TreeGenerator:
 
 		for key, value in env.items():
 			os.environ[key] = value
+
+		return base_folder
+
+	def add_entry(self, entry_name: str):
+		base_folder = self.parse_entry(entry_name)
 
 		create_tree_from_dict(base_folder, self.tree)
 
