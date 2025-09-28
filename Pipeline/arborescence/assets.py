@@ -95,10 +95,13 @@ class TreeGenerator:
 			"CREATION_TIME": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
 		}
 
-		for key, value in env.items():
-			os.environ[key] = value
+		self.update_env(env)
 
 		return base_folder
+	
+	def update_env(self, new_vars: dict):
+		for key, value in new_vars.items():
+			os.environ[key] = value
 
 	def add_entry(self, entry_name: str):
 		base_folder = self.parse_entry(entry_name)
