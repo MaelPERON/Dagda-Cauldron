@@ -45,7 +45,7 @@ class TreeGenerator:
 			raise ValueError(f"Invalid configuration file: {config_path}")
 
 		self.config : dict = json.load(open(path))
-		self.root_path = self.config.get("root_path", None)
+		self.root_path = fetch_resource_path(self.config.get("root_path", None))
 		self.tree = self.config.get("tree", None)
 		self.settings = self.config.get("settings", {
 			"entry_type_aliases": None,
@@ -84,10 +84,9 @@ class TreeGenerator:
 			raise ValueError(f"Invalid entry type alias: {entry_type}\nValid types are: {aliases_list}")
 		
 		entry_prefix = aliases_list[entry_type][0]
-		root_path = fetch_resource_path(self.root_path)
-		if not root_path.exists():
+		if not self.root_path.exists():
 			raise FileNotFoundError(f"Root path not found: {self.root_path}")
-		base_folder = root_path / entry_prefix
+		base_folder = self.root_path / entry_prefix
 		base_folder.mkdir(parents=True, exist_ok=True)
 
 		env = {
