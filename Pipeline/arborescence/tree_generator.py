@@ -3,6 +3,7 @@ import os
 import json
 import datetime
 import re
+import argparse
 
 SCRIPT_FOLDER = Path(__file__).parent
 CONFIG = None
@@ -119,5 +120,10 @@ class TreeGenerator:
 		create_tree_from_dict(base_folder, self.tree)
 
 if __name__ == "__main__":
-	path = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\configs.json"
-	generator = TreeGenerator(path)
+	parser = argparse.ArgumentParser(description="Generate tree structure from config and entry name.")
+	parser.add_argument("config", type=str, help="Path to the configuration JSON file.")
+	parser.add_argument("entry", type=str, help="Entry name to add.")
+	args = parser.parse_args()
+
+	generator = TreeGenerator(args.config)
+	generator.add_entry(args.entry)
