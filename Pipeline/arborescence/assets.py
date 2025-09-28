@@ -16,7 +16,7 @@ CONFIG_PATH = None
 ROOT_PATH = None
 
 def fetch_resource_path(resource: str | Path) -> Path:
-	path = Path(resource)
+	path = Path(os.path.expandvars(resource))
 
 	if not path.is_absolute():
 		path = SCRIPT_FOLDER / path
@@ -79,8 +79,8 @@ def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
 if __name__ == "__main__":
 	root = r"G:\Mon Drive\ENSI\01_E4\Exos\taste_of_guerilla" # first argument
 	config = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\assets.json" # second argument
-	ROOT_PATH = fetch_resource_path(os.path.expandvars("%projet%/assets/"))
-	CONFIG_PATH = fetch_resource_path(os.path.expandvars("./assets.json"))
+	ROOT_PATH = fetch_resource_path("%projet%/assets/")
+	CONFIG_PATH = fetch_resource_path("./assets.json")
 
 	if not CONFIG_PATH.exists():
 		raise FileNotFoundError(f"Configuration file not found: {CONFIG_PATH}")
