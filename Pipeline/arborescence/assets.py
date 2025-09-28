@@ -46,7 +46,7 @@ def create_tree_from_dict(base_path: Path, tree: dict|str):
 def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
 	parts = asset_name.split("_")
 	length = len(parts)
-	if length < 3:
+	if length < 2:
 		raise ValueError(f"Asset name must be in the format <type>_<id>[_<variant>], got: {asset_name}")
 	elif length == 2:
 		asset_type = parts[0]
