@@ -51,7 +51,7 @@ def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
 	elif length == 2:
 		asset_type = parts[0]
 		asset_id = parts[1]
-		asset_variant = None
+		asset_variant = "base"
 	else:
 		asset_type = parts[0]
 		asset_variant = parts[-1]
