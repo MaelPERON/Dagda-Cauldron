@@ -42,6 +42,40 @@ def create_tree_from_dict(base_path: Path, tree: dict|str):
 	else:
 		# Here "tree" is the content of the file to create at base_path
 		create_tree_file(base_path, tree)
+
+def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
+	parts = asset_name.split("_")
+	asset_type = parts[0]
+	asset_variant = parts[-1]
+	asset_id = "_".join(parts[1:-1])
+
+	# Verify asset_type is a valid alias in ASSET_TYPES
+	for key, aliases in ASSET_TYPES.items():
+		if asset_type in aliases:
+			asset_type = key
+			break
+	else:
+		raise ValueError(f"Invalid asset type alias: {asset_type}\nValid types are: {ASSET_TYPES}")
+
+	asset_prefix = ASSET_TYPES[asset_type][0]
+
+	base_folder = ROOT_PATH / asset_type
+	base_folder.mkdir(parents=True, exist_ok=True)
+
+	env = {
+		"ASSET_TYPE": asset_type,
+		"ASSET_ID": asset_id,
+		"ASSET_NAME": asset_name,
+		"ASSET_VARIANT": asset_variant,
+		"ASSET_PREFIX": asset_prefix,
+		"CREATION_TIME": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+	}
+
+	for key, value in env.items():
+		os.environ[key] = value
+
+	create_tree_from_dict(base_folder, tree)
+
 if __name__ == "__main__":
 	root = r"G:\Mon Drive\ENSI\01_E4\Exos\taste_of_guerilla" # first argument
 	config = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\assets.json" # second argument
