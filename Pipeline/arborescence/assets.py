@@ -28,6 +28,20 @@ def create_tree_file(path: Path, content: str = ""):
 	path.parent.mkdir(parents=True, exist_ok=True)
 	with open(path, "w", encoding="utf-8") as f:
 		f.write(content)
+
+def create_tree_from_dict(base_path: Path, tree: dict|str):
+	if isinstance(tree, dict):
+		for key, value in tree.items():
+			key_expanded = os.path.expandvars(key)
+			item_path = base_path / key_expanded
+			if isinstance(value, dict):
+				item_path.mkdir(exist_ok=True)
+				create_tree_from_dict(item_path, value)
+			else:
+				create_tree_file(item_path, value)
+	else:
+		# Here "tree" is the content of the file to create at base_path
+		create_tree_file(base_path, tree)
 if __name__ == "__main__":
 	root = r"G:\Mon Drive\ENSI\01_E4\Exos\taste_of_guerilla" # first argument
 	config = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\assets.json" # second argument
