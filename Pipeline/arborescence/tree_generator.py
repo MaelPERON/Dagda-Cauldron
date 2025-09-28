@@ -143,13 +143,20 @@ class TreeGenerator:
 		create_tree_from_dict(base_folder, self.tree)
 		logging.info(f"Entry '{entry_name}' added successfully.")
 
+		return base_folder
+
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser(description="Generate tree structure from config and entry name.")
 	parser.add_argument("config", type=str, help="Path to the configuration JSON file.")
 	parser.add_argument("entry", type=str, help="Entry name to add.")
+	parser.add_argument("--open-folder", action="store_true", default=True, help="Open the created folder after generation (default: True)")
 	args = parser.parse_args()
 
 	logging.info(f"Starting tree generation with config '{args.config}' and entry '{args.entry}'")
 	generator = TreeGenerator(args.config)
-	generator.add_entry(args.entry)
+	folder = generator.add_entry(args.entry)
 	logging.info("Tree generation completed.")
+
+	if args.open_folder:
+		logging.info(f"Opening folder: {folder}")
+		os.startfile(folder)
