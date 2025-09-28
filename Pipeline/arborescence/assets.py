@@ -45,9 +45,17 @@ def create_tree_from_dict(base_path: Path, tree: dict|str):
 
 def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
 	parts = asset_name.split("_")
-	asset_type = parts[0]
-	asset_variant = parts[-1]
-	asset_id = "_".join(parts[1:-1])
+	length = len(parts)
+	if length < 3:
+		raise ValueError(f"Asset name must be in the format <type>_<id>[_<variant>], got: {asset_name}")
+	elif length == 2:
+		asset_type = parts[0]
+		asset_id = parts[1]
+		asset_variant = None
+	else:
+		asset_type = parts[0]
+		asset_variant = parts[-1]
+		asset_id = "_".join(parts[1:-1])
 
 	# Verify asset_type is a valid alias in ASSET_TYPES
 	for key, aliases in ASSET_TYPES.items():
