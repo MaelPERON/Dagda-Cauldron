@@ -29,7 +29,7 @@
         "setup": {
             "work": {},
             "exports": {}
-        }
-    },
-    "description.txt": "A regular %ASSET_TYPE% asset. Created at %CREATION_TIME%."
+        },
+        "description.txt": "A regular %ASSET_TYPE% asset. Created at %CREATION_TIME%."
+    }
 }
