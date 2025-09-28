@@ -35,7 +35,7 @@ def create_tree_from_dict(base_path: Path, tree: dict|str):
 			key_expanded = os.path.expandvars(key)
 			item_path = base_path / key_expanded
 			if isinstance(value, dict):
-				item_path.mkdir(exist_ok=True)
+				item_path.mkdir(exist_ok=True, parents=True)
 				create_tree_from_dict(item_path, value)
 			else:
 				create_tree_file(item_path, value)
