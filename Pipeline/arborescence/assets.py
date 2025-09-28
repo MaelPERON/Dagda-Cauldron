@@ -8,6 +8,8 @@ SCRIPT_FOLDER = Path(__file__).parent
 CONFIG = None
 
 def fetch_resource_path(resource: str | Path) -> Path:
+	if not resource:
+		raise ValueError("Resource path cannot be empty or None")
 	path = Path(os.path.expandvars(resource))
 
 	if not path.is_absolute():
