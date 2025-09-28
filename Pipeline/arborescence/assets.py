@@ -77,30 +77,29 @@ def generate_asset_tree(asset_name: str, tree: dict[dict|str], aliases_list: dic
 	create_tree_from_dict(base_folder, tree)
 
 if __name__ == "__main__":
-	config_path = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\configs.json"
-	old_config_path = config_path
-	config_path = fetch_resource_path(config_path)
+	path = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\configs.json"
+	config_path = fetch_resource_path(path)
 	asset_name = "char_hero_hurt"
 
 	if not config_path.exists():
-		raise FileNotFoundError(f"Configuration file not found: {old_config_path}")
+		raise FileNotFoundError(f"Configuration file not found: {path}")
 
 	if not config_path.is_file() or config_path.suffix != ".json":
-		raise ValueError(f"Invalid configuration file: {old_config_path}")
+		raise ValueError(f"Invalid configuration file: {path}")
 
 	CONFIG = json.load(open(config_path))
 
 	root_path = CONFIG.get("root_path", None)
 	if not root_path:
-		raise ValueError(f"'root_path' not defined in configuration file: {old_config_path}")
+		raise ValueError(f"'root_path' not defined in configuration file: {path}")
 	ROOT_PATH = fetch_resource_path(root_path)
 
 	TREE = CONFIG.get("tree", None)
 	if not TREE:
-		raise ValueError(f"'tree' not defined in configuration file: {old_config_path}")
+		raise ValueError(f"'tree' not defined in configuration file: {path}")
 	
 	TYPE_ALIASES = CONFIG.get("type_aliases", None)
 	if not TYPE_ALIASES:
-		raise ValueError(f"'type_aliases' not defined in configuration file: {old_config_path}")
+		raise ValueError(f"'type_aliases' not defined in configuration file: {path}")
 
 	generate_asset_tree(asset_name, TREE, TYPE_ALIASES)
