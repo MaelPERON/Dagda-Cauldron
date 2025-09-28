@@ -6,7 +6,8 @@
             "Setdresess": ["setdress","set"],
             "Parts": ["parts","part"],
             "Vehicles": ["vehicles","veh"]
-        }
+        },
+        "has_variants": true
     },
     "root_path": "%projet%/assets",
     "tree": {
