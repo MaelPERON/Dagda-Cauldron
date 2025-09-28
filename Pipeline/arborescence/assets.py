@@ -5,15 +5,7 @@ import datetime
 import re
 
 SCRIPT_FOLDER = Path(__file__).parent
-ASSET_TYPES = {
-	"Characters": ["char","chars","character"],
-	"Props": ["prop","props"],
-	"Sets": ["set","setdress"],
-	"Parts": ["part","parts"],
-	"Vehicles": ["veh","vehicle"],
-}
-CONFIG_PATH = None
-ROOT_PATH = None
+CONFIG = None
 
 def fetch_resource_path(resource: str | Path) -> Path:
 	path = Path(os.path.expandvars(resource))
@@ -43,7 +35,7 @@ def create_tree_from_dict(base_path: Path, tree: dict|str):
 		# Here "tree" is the content of the file to create at base_path
 		create_tree_file(base_path, tree)
 
-def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
+def generate_asset_tree(asset_name: str, tree: dict[dict|str], aliases_list: dict[str, list[str]]) -> Path:
 	parts = asset_name.split("_")
 	length = len(parts)
 	if length < 2:
@@ -57,15 +49,15 @@ def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
 		asset_variant = parts[-1]
 		asset_id = "_".join(parts[1:-1])
 
-	# Verify asset_type is a valid alias in ASSET_TYPES
-	for key, aliases in ASSET_TYPES.items():
-		if asset_type in aliases:
+	# Verify asset_type is a valid alias in aliases_list
+	for key, aliases in aliases_list.items():
+		if asset_type.lower() in aliases:
 			asset_type = key
 			break
 	else:
-		raise ValueError(f"Invalid asset type alias: {asset_type}\nValid types are: {ASSET_TYPES}")
+		raise ValueError(f"Invalid asset type alias: {asset_type}\nValid types are: {aliases_list}")
 
-	asset_prefix = ASSET_TYPES[asset_type][0]
+	asset_prefix = aliases_list[asset_type][0]
 
 	base_folder = ROOT_PATH / asset_prefix
 	base_folder.mkdir(parents=True, exist_ok=True)
@@ -85,18 +77,30 @@ def generate_asset_tree(asset_name: str, tree: dict[dict|str]) -> Path:
 	create_tree_from_dict(base_folder, tree)
 
 if __name__ == "__main__":
-	root = r"G:\Mon Drive\ENSI\01_E4\Exos\taste_of_guerilla" # first argument
-	config = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\assets.json" # second argument
-	asset_name = "char_hero" # third argument
-	ROOT_PATH = fetch_resource_path("%projet%/assets/")
-	CONFIG_PATH = fetch_resource_path("./assets.json")
+	config_path = r"D:\Documents\Github\Dagda-Cauldron\Pipeline\arborescence\configs.json"
+	old_config_path = config_path
+	config_path = fetch_resource_path(config_path)
+	asset_name = "char_hero_hurt"
 
-	if not CONFIG_PATH.exists():
-		raise FileNotFoundError(f"Configuration file not found: {CONFIG_PATH}")
+	if not config_path.exists():
+		raise FileNotFoundError(f"Configuration file not found: {old_config_path}")
 
-	if not CONFIG_PATH.is_file() or CONFIG_PATH.suffix != ".json":
-		raise ValueError(f"Invalid configuration file: {CONFIG_PATH}")
+	if not config_path.is_file() or config_path.suffix != ".json":
+		raise ValueError(f"Invalid configuration file: {old_config_path}")
 
-	aborescence = json.load(open(CONFIG_PATH))
+	CONFIG = json.load(open(config_path))
 
-	generate_asset_tree(asset_name, aborescence)
+	root_path = CONFIG.get("root_path", None)
+	if not root_path:
+		raise ValueError(f"'root_path' not defined in configuration file: {old_config_path}")
+	ROOT_PATH = fetch_resource_path(root_path)
+
+	TREE = CONFIG.get("tree", None)
+	if not TREE:
+		raise ValueError(f"'tree' not defined in configuration file: {old_config_path}")
+	
+	TYPE_ALIASES = CONFIG.get("type_aliases", None)
+	if not TYPE_ALIASES:
+		raise ValueError(f"'type_aliases' not defined in configuration file: {old_config_path}")
+
+	generate_asset_tree(asset_name, TREE, TYPE_ALIASES)

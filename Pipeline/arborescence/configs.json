@@ -1,35 +1,48 @@
 {
-    "%asset_id%_%asset_variant%": {
-        "modeling": {
-            "work": {},
-            "exports": {}
-        },
-        "unwrapping": {
-            "work": {},
-            "exports": {}
-        },
-        "texturing": {
-            "work": {},
-            "exports": {}
-        },
-        "shading": {
-            "exports": {},
-            "renders": {},
-            "work": {}
-        },
-        "compositing": {
-            "work": {},
-            "exports": {},
-            "renders": {}
-        },
-        "rigging": {
-            "work": {},
-            "exports": {}
-        },
-        "setup": {
-            "work": {},
-            "exports": {}
-        },
-        "description.txt": "A regular %ASSET_TYPE% asset. Created at %CREATION_TIME%."
+    "settings": {
+        "entry_types": true
+    },
+    "root_path": "%projet%/assets",
+    "type_aliases": {
+        "Characters": ["characters","character","chars","char"],
+        "Props": ["props","prop"],
+        "Setdresess": ["setdress","set"],
+        "Parts": ["parts","part"],
+        "Vehicles": ["vehicles","veh"]
+    },
+    "tree": {
+        "%asset_id%_%asset_variant%": {
+            "modeling": {
+                "work": {},
+                "exports": {}
+            },
+            "unwrapping": {
+                "work": {},
+                "exports": {}
+            },
+            "texturing": {
+                "work": {},
+                "exports": {}
+            },
+            "shading": {
+                "exports": {},
+                "renders": {},
+                "work": {}
+            },
+            "compositing": {
+                "work": {},
+                "exports": {},
+                "renders": {}
+            },
+            "rigging": {
+                "work": {},
+                "exports": {}
+            },
+            "setup": {
+                "work": {},
+                "exports": {}
+            },
+            "description.txt": "A regular %ASSET_TYPE% asset. Created at %CREATION_TIME%."
+        }
     }
 }
