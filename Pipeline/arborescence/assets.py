@@ -51,9 +51,8 @@ class TreeGenerator:
 			"entry_type_aliases": None,
 			"has_variants": True
 		})
-		# self.env
 
-	def parse_entry(self, entry_name: str) -> Path:
+	def split_entry(self, entry_name: str) -> list[str]:
 		parts = entry_name.split("_")
 		length = len(parts)
 		if length < 2:
@@ -66,6 +65,11 @@ class TreeGenerator:
 			entry_type = parts[0]
 			entry_variant = parts[-1]
 			entry_id = "_".join(parts[1:-1])
+
+		return [entry_type, entry_id, entry_variant]
+
+	def parse_entry(self, entry_name: str) -> Path:
+		entry_type, entry_id, entry_variant = self.split_entry(entry_name)
 
 		aliases_list = self.settings.get("entry_type_aliases", None)
 		if not aliases_list:
