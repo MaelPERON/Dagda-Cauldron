@@ -91,8 +91,7 @@ class TreeGenerator:
 			"ENTRY_ID": entry_id,
 			"ENTRY_NAME": entry_name,
 			"ENTRY_VARIANT": entry_variant,
-			"ENTRY_PREFIX": entry_prefix,
-			"CREATION_TIME": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+			"ENTRY_PREFIX": entry_prefix
 		}
 
 		self.update_env(env)
@@ -105,6 +104,11 @@ class TreeGenerator:
 
 	def add_entry(self, entry_name: str):
 		base_folder = self.parse_entry(entry_name)
+
+		extra_env = {
+			"CREATION_TIME": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+		}
+		self.update_env(extra_env)
 
 		create_tree_from_dict(base_folder, self.tree)
 
